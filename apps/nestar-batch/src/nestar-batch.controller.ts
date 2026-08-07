@@ -1,5 +1,6 @@
 import { Controller, Get } from '@nestjs/common';
 import { NestarBatchService } from './nestar-batch.service';
+import { ConfigModule } from '@nestjs/config';
 
 @Controller()
 export class NestarBatchController {
