@@ -37,7 +37,8 @@ export class MemberService {
 			throw new InternalServerErrorException(Message.BLOCKED_USER);
 		}
 		// TODO: Compare Password
-		console.log('response:', response);
+		// member's all personal details:
+		// console.log('response:', response);
 
 		const isMatch = memberPassword === input.memberPassword;
 		if (!isMatch) {
