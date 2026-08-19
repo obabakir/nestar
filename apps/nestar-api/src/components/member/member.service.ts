@@ -7,16 +7,18 @@ import { todo } from 'node:test';
 import { MemberStatus } from '../../libs/enums/member.enum';
 import { Message } from '../../libs/enums/common.enum';
 import * as bcrypt from 'bcrypt';
+import { AuthService } from '../auth/auth.service';
 
 @Injectable()
 export class MemberService {
-	constructor(@InjectModel('Member') private readonly memberModel: Model<Member>) {}
+	constructor(
+		@InjectModel('Member') private readonly memberModel: Model<Member>,
+		private authService: AuthService,
+	) {}
 
 	public async signup(input: MemberInput): Promise<Member> {
 		// TODO: Hash Password
-		// const hashedPassword = await bcrypt.hash(input.memberPassword, 10);
-
-		// input.memberPassword = hashedPassword;
+		input.memberPassword = await this.authService.hashPassword(input.memberPassword);
 		try {
 			const result = await this.memberModel.create(input);
 
@@ -46,9 +48,7 @@ export class MemberService {
 		// member's all personal details:
 		// console.log('response:', response);
 
-		// ------- vaqtincha -----
-
-		const isMatch = memberPassword === response.memberPassword;
+		const isMatch = await this.authService.comparePassword(input.memberPassword, response.memberPassword);
 		if (!isMatch) {
 			throw new InternalServerErrorException(Message.WRONG_PASSWORD);
 		}
