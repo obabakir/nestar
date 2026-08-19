@@ -6,6 +6,7 @@ import { LoginInput, MemberInput } from '../../libs/dto/member/member.input';
 import { todo } from 'node:test';
 import { MemberStatus } from '../../libs/enums/member.enum';
 import { Message } from '../../libs/enums/common.enum';
+import * as bcrypt from 'bcrypt';
 
 @Injectable()
 export class MemberService {
@@ -13,12 +14,16 @@ export class MemberService {
 
 	public async signup(input: MemberInput): Promise<Member> {
 		// TODO: Hash Password
+		// const hashedPassword = await bcrypt.hash(input.memberPassword, 10);
+
+		// input.memberPassword = hashedPassword;
 		try {
 			const result = await this.memberModel.create(input);
 
 			// TODO: Authentication via TOOKEN
 			return result;
 		} catch (err) {
+			// (err as Error).message) = err.message
 			console.log('Error, Service.model:', (err as Error).message);
 			throw new BadRequestException(Message.USED_MEMBER_NICK_OR_PHONE);
 		}
@@ -36,11 +41,14 @@ export class MemberService {
 		} else if (response.memberStatus === MemberStatus.BLOCK) {
 			throw new InternalServerErrorException(Message.BLOCKED_USER);
 		}
+
 		// TODO: Compare Password
 		// member's all personal details:
 		// console.log('response:', response);
 
-		const isMatch = memberPassword === input.memberPassword;
+		// ------- vaqtincha -----
+
+		const isMatch = memberPassword === response.memberPassword;
 		if (!isMatch) {
 			throw new InternalServerErrorException(Message.WRONG_PASSWORD);
 		}
