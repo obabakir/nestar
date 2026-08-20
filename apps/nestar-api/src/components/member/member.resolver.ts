@@ -43,9 +43,9 @@ export class MemberResolver {
 		return this.memberService.getMember();
 	}
 
-	// FOR TEST ====
+	// FOR  QUERY AUTHENTICATION && AUTHORIZATIONTEST ====
 	@UseGuards(AuthGuard)
-	@Mutation(() => String)
+	@Query(() => String)
 	public async checkAuth(@AuthMember('memberNick') memberNick: string): Promise<string> {
 		console.log('Mutation: updateMember');
 
@@ -56,8 +56,8 @@ export class MemberResolver {
 
 	@Roles(MemberType.USER, MemberType.AGENT)
 	@UseGuards(RolesGuard)
-	@Mutation(() => String)
-	public async checkAuthRole(@AuthMember() authMember: Member): Promise<string> {
+	@Query(() => String)
+	public async checkAuthRoles(@AuthMember() authMember: Member): Promise<string> {
 		console.log('Mutation: updateMember');
 
 		console.log('Query: checkAuth');
