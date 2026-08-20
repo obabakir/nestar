@@ -60,7 +60,7 @@ export class MemberService {
 	}
 
 	public async updateMember(): Promise<string> {
-		return 'updateMember exacuted !';
+		return 'updateMember exacuted => !';
 	}
 
 	public async getMember(): Promise<string> {
