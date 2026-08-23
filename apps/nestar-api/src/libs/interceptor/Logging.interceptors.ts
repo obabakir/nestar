@@ -34,7 +34,7 @@ export class LoggingInterceptor implements NestInterceptor {
 	}
 	// shape response => into string,
 	public stringify(context: ExecutionContext): string {
-		return JSON.stringify(context).slice(0, 75);
+		return JSON.stringify(context).slice(0, 85);
 	}
 
 	//  response 0 dan 75 harf log qiladi,  100 .... ok
