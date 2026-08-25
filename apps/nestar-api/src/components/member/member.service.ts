@@ -139,7 +139,7 @@ export class MemberService {
 		const { memberStatus, memberType, text } = input.search;
 		const match: T = {};
 		// if (memberStatus) match.MemberStatus = memberStatus; <=> teacher's case
-		if (memberStatus) match.MemberStatus = memberStatus;
+		if (memberStatus) match.memberStatus = memberStatus;
 		if (memberType) match.memberType = memberType;
 		const sort: T = { [input.sort ?? 'createdAt']: input.direction ?? Direction.DESC };
 
