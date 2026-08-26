@@ -64,15 +64,16 @@ export class MemberService {
 
 		return response;
 	}
-
 	public async updateMember(memberId: ObjectId, input: MemberUpdate): Promise<Member> {
+		const { _id, ...updateData } = input;
+
 		const result: Member = await this.memberModel
 			.findOneAndUpdate(
 				{
 					_id: memberId,
 					memberStatus: MemberStatus.ACTIVE,
 				},
-				input,
+				updateData,
 				{ new: true },
 			)
 			.exec();
@@ -82,6 +83,24 @@ export class MemberService {
 		result.accessToken = await this.authService.createToken(result);
 		return result;
 	}
+	// TODO: TEACHER'S CASE
+	// public async updateMember(memberId: ObjectId, input: MemberUpdate): Promise<Member> {
+	// 	const result: Member = await this.memberModel
+	// 		.findOneAndUpdate(
+	// 			{
+	// 				_id: memberId,
+	// 				memberStatus: MemberStatus.ACTIVE,
+	// 			},
+	// 			input,
+	// 			{ new: true },
+	// 		)
+	// 		.exec();
+
+	// 	if (!result) throw new InternalServerErrorException(Message.UPDATE_FAILED);
+
+	// 	result.accessToken = await this.authService.createToken(result);
+	// 	return result;
+	// }
 
 	public async getMember(memberId: ObjectId, targetId: ObjectId): Promise<Member> {
 		const search: T = {
@@ -138,6 +157,7 @@ export class MemberService {
 	public async getAllMembersByAdmin(input: MembersInquiry): Promise<Members> {
 		const { memberStatus, memberType, text } = input.search;
 		const match: T = {};
+		// TODO:
 		// if (memberStatus) match.MemberStatus = memberStatus; <=> teacher's case
 		if (memberStatus) match.memberStatus = memberStatus;
 		if (memberType) match.memberType = memberType;

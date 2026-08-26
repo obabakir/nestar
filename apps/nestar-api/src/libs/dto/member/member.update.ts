@@ -5,6 +5,8 @@ import { ObjectId } from 'mongoose';
 
 @InputType()
 export class MemberUpdate {
+	// @Field(() => String, { nullable: true })
+	// _id?: string;
 	@IsNotEmpty()
 	@Field(() => String)
 	_id: ObjectId;
