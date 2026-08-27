@@ -18,6 +18,7 @@ import { MemberModule } from '../member/member.module';
 		AuthModule,
 		ViewModule,
 		MemberModule,
+		ViewModule,
 	],
 	providers: [PropertyResolver, PropertyService],
 })
