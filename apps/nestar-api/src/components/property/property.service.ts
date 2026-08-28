@@ -14,10 +14,11 @@ import { ViewService } from '../view/view.service';
 import { PropertyStatus } from '../../libs/enums/property.enum';
 import { StatisticModifier, T } from '../../libs/types/common';
 import { ViewGroup } from '../../libs/enums/view.enum';
-import moment from 'moment';
+import moment = require('moment');
 import { PropertyUpdate } from '../../libs/dto/property/property.update';
 import { lookupMember, shapeIntoMongoObjectId } from '../../libs/config';
 import { exec } from 'child_process';
+import { error } from 'console';
 
 @Injectable()
 export class PropertyService {
@@ -343,4 +344,13 @@ export class PropertyService {
  return result[0];
 }* 
  **/
+
+	public async removePropertyByAdmin(propertyId: ObjectId): Promise<Property> {
+		const search: T = { _id: propertyId, propertyStatus: PropertyStatus.DELETE };
+		const result = await this.propertyModel.findOneAndDelete(search).exec();
+
+		if (!result) throw new InternalServerErrorException(Message.REMOVE_FAILED);
+
+		return result;
+	}
 }
