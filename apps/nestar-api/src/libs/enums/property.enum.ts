@@ -10,7 +10,6 @@ registerEnumType(PropertyType, {
 });
 
 export enum PropertyStatus {
-	HOLD = 'HOLD',
 	ACTIVE = 'ACTIVE',
 	SOLD = 'SOLD',
 	DELETE = 'DELETE',
@@ -29,6 +28,8 @@ export enum PropertyLocation {
 	CHONJU = 'CHONJU',
 	DAEJON = 'DAEJON',
 	JEJU = 'JEJU',
+	PYEONGTAEK = 'PYEONGTAEK',
+	CHEONAN = 'CHEONAN',
 }
 registerEnumType(PropertyLocation, {
 	name: 'PropertyLocation',
