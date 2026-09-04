@@ -11,7 +11,7 @@ import { ViewModule } from '../view/view.module';
 	imports: [
 		MongooseModule.forFeature([
 			{
-				name: 'BoardAticle',
+				name: 'BoardArticle',
 				schema: BoardArticleSchema,
 			},
 		]),
