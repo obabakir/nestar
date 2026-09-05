@@ -19,6 +19,8 @@ import { PropertyUpdate } from '../../libs/dto/property/property.update';
 import { lookupMember, shapeIntoMongoObjectId } from '../../libs/config';
 import { exec } from 'child_process';
 import { error } from 'console';
+import { CommentUpdate } from '../../libs/dto/comment/comment.update';
+import { Comment } from '../../libs/dto/comment/comment';
 
 @Injectable()
 export class PropertyService {
@@ -352,6 +354,6 @@ export class PropertyService {
 
 	public async propertyStatsEditor(input: StatisticModifier): Promise<Property> {
 		const { _id, targetKey, modifier } = input;
-		return await this.propertyModel.findOneAndUpdate(_id, { $inc: { [targetKey]: modifier } }, { new: true }).exec();
+		return await this.propertyModel.findByIdAndUpdate(_id, { $inc: { [targetKey]: modifier } }, { new: true }).exec();
 	}
 }
