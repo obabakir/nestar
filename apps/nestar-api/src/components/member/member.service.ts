@@ -129,6 +129,10 @@ export class MemberService {
 			}
 		}
 		// TODO: meLiked
+		const likeInput = { memberId: memberId, likeRefId: targetId, likeGroup: LikeGroup.MEMBER };
+
+		targetMember.meLiked = await this.likeService.checkLikeExistence(likeInput);
+
 		// TODO: meFollowed
 
 		return targetMember;

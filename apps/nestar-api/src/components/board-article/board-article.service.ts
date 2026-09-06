@@ -67,7 +67,11 @@ export class BoardArticleService {
 				});
 				targetBoardArticle.articleViews++;
 			}
-			// me liked
+			//TODO: ME LIKED
+
+			const likeInput = { memberId: memberId, likeRefId: articleId, likeGroup: LikeGroup.ARTICLE };
+
+			targetBoardArticle.meLiked = await this.likeService.checkLikeExistence(likeInput);
 		}
 
 		// memberni malumotini olish un ekankuu jigar, method nomiga qara
