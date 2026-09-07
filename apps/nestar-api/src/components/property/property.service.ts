@@ -16,7 +16,7 @@ import { StatisticModifier, T } from '../../libs/types/common';
 import { ViewGroup } from '../../libs/enums/view.enum';
 import moment = require('moment');
 import { PropertyUpdate } from '../../libs/dto/property/property.update';
-import { lookupMember, shapeIntoMongoObjectId } from '../../libs/config';
+import { lookupAuthMemberLiked, lookupMember, shapeIntoMongoObjectId } from '../../libs/config';
 import { exec } from 'child_process';
 import { error } from 'console';
 import { CommentUpdate } from '../../libs/dto/comment/comment.update';
@@ -131,7 +131,8 @@ export class PropertyService {
 						list: [
 							{ $skip: (input.page - 1) * input.limit },
 							{ $limit: input.limit },
-							//  meLiked
+							//TODO:  meLiked
+							lookupAuthMemberLiked(memberId),
 							lookupMember,
 							{ $unwind: '$memberData' },
 						],

@@ -19,6 +19,7 @@ export const availableBoardArticleSorts = ['createdAt', 'updatedAt', 'articleLik
 // IMAGE CONFIGURATION
 import { v4 as uuidv4 } from 'uuid';
 import * as path from 'path';
+import { T } from './types/common';
 
 export const validMimeTypes = ['image/png', 'image/jpg', 'image/jpeg', 'image/webp'];
 export const getSerialForImage = (filename: string) => {
@@ -28,6 +29,41 @@ export const getSerialForImage = (filename: string) => {
 
 export const shapeIntoMongoObjectId = (target: any) => {
 	return typeof target === 'string' ? new ObjectId(target) : target;
+};
+
+// meLiked
+export const lookupAuthMemberLiked = (memberId: T, targetRefId: string = '$_id') => {
+	return {
+		$lookup: {
+			from: 'likes',
+			let: {
+				localLikeRefId: targetRefId,
+				localMemberId: memberId,
+				localMyFavorite: true,
+			},
+			// inside lookup
+			pipeline: [
+				// STEP 1, matching
+				{
+					$match: {
+						$expr: {
+							$and: [{ $eq: ['$likeRefId', '$$localLikeRefId'] }, { $eq: ['$memberId', '$$localMemberId'] }],
+						},
+					},
+				},
+				// STEP 2, projection property.ts: agregation => meliked dan elyapmis, ustozga ozing javob bergansankuuu
+				{
+					$project: {
+						_id: 0,
+						memberId: 1,
+						likeRefId: 1,
+						myFavorite: '$$localMyFavorite',
+					},
+				},
+			],
+			as: 'meLiked',
+		},
+	};
 };
 
 export const lookupMember = {
