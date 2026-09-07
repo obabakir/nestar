@@ -17,6 +17,7 @@ import { LikeInput } from '../../libs/dto/like/like.input';
 import { LikeGroup } from '../../libs/enums/like.enum';
 import { LikeService } from '../like/like.service';
 import { Follower, Following, MeFollowed } from '../../libs/dto/follow/follow';
+import { lookupAuthMemberLiked } from '../../libs/config';
 
 @Injectable()
 export class MemberService {
@@ -161,38 +162,15 @@ export class MemberService {
 			.aggregate([
 				{ $match: match },
 				{ $sort: sort },
+
 				{
 					$facet: {
-						list: [{ $skip: (input.page - 1) * input.limit }, { $limit: input.limit }],
-						metaCounter: [{ $count: 'total' }],
-					},
-				},
-			])
-			.exec();
-
-		// console.log(' result => ', result);
-		if (!result) throw new InternalServerErrorException(Message.NO_DATA_FOUND);
-		return result[0];
-	}
-
-	public async getAllMembersByAdmin(input: MembersInquiry): Promise<Members> {
-		const { memberStatus, memberType, text } = input.search;
-		const match: T = {};
-		// TODO:
-		// if (memberStatus) match.MemberStatus = memberStatus; <=> teacher's case
-		if (memberStatus) match.memberStatus = memberStatus;
-		if (memberType) match.memberType = memberType;
-		const sort: T = { [input.sort ?? 'createdAt']: input.direction ?? Direction.DESC };
-
-		if (text) match.memberNick = { $regex: new RegExp(text, 'i') };
-		console.log('match =>', match);
-		const result = await this.memberModel
-			.aggregate([
-				{ $match: match },
-				{ $sort: sort },
-				{
-					$facet: {
-						list: [{ $skip: (input.page - 1) * input.limit }, { $limit: input.limit }],
+						list: [
+							{ $skip: (input.page - 1) * input.limit }, //
+							{ $limit: input.limit }, //
+							// TODO: me liked
+							lookupAuthMemberLiked(memberId), //
+						], //
 						metaCounter: [{ $count: 'total' }],
 					},
 				},
@@ -223,6 +201,35 @@ export class MemberService {
 		});
 		if (!result) throw new InternalServerErrorException(Message.SOMETHING_WENT_WRONG);
 		return result;
+	}
+
+	public async getAllMembersByAdmin(input: MembersInquiry): Promise<Members> {
+		const { memberStatus, memberType, text } = input.search;
+		const match: T = {};
+		// TODO:
+		// if (memberStatus) match.MemberStatus = memberStatus; <=> teacher's case
+		if (memberStatus) match.memberStatus = memberStatus;
+		if (memberType) match.memberType = memberType;
+		const sort: T = { [input.sort ?? 'createdAt']: input.direction ?? Direction.DESC };
+
+		if (text) match.memberNick = { $regex: new RegExp(text, 'i') };
+		console.log('match =>', match);
+		const result = await this.memberModel
+			.aggregate([
+				{ $match: match },
+				{ $sort: sort },
+				{
+					$facet: {
+						list: [{ $skip: (input.page - 1) * input.limit }, { $limit: input.limit }],
+						metaCounter: [{ $count: 'total' }],
+					},
+				},
+			])
+			.exec();
+
+		// console.log(' result => ', result);
+		if (!result) throw new InternalServerErrorException(Message.NO_DATA_FOUND);
+		return result[0];
 	}
 
 	public async updatedMemberByAdmin(input: MemberUpdate): Promise<Member> {
