@@ -66,6 +66,47 @@ export const lookupAuthMemberLiked = (memberId: T, targetRefId: string = '$_id')
 	};
 };
 
+// meFollowed
+interface LookupAuthMemberFollowed {
+	followerId: T;
+	followingId: string;
+}
+export const lookupAuthMemberFollowed = (input: LookupAuthMemberFollowed) => {
+	const { followerId, followingId } = input;
+
+	return {
+		$lookup: {
+			from: 'follows',
+			let: {
+				localFollowerId: followerId,
+				localFollowingId: followingId,
+				localMyFavorite: true,
+			},
+			// inside lookup
+			pipeline: [
+				// STEP 1, matching
+				{
+					$match: {
+						$expr: {
+							$and: [{ $eq: ['$followerId', '$$localFollowerId'] }, { $eq: ['$followingId', '$$localFollowingId'] }],
+						},
+					},
+				},
+				// STEP 2, projection property.ts: agregation => meliked dan elyapmis, ustozga ozing javob bergansankuuu
+				{
+					$project: {
+						_id: 0,
+						followerId: 1,
+						followingId: 1,
+						myFollowing: '$$localMyFavorite',
+					},
+				},
+			],
+			as: 'meFollowed',
+		},
+	};
+};
+
 export const lookupMember = {
 	$lookup: {
 		from: 'members',
