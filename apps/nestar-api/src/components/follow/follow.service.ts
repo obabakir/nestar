@@ -88,7 +88,7 @@ export class FollowService {
 
 		const match: T = { followerId: search?.followerId };
 		console.log('match:', match);
-
+		//I VIEW => JHON'S FOLLOWING MEMBERS
 		const result = await this.followModel
 			.aggregate([
 				{ $match: match },

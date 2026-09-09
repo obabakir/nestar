@@ -46,8 +46,12 @@ export const lookupAuthMemberLiked = (memberId: T, targetRefId: string = '$_id')
 				// STEP 1, matching
 				{
 					$match: {
+						// boshqa collectiondan qidirayotgani un expression & and || or bu taqqoslash, Matt aytgandi, qidirish mantigi, equal dan foydalanayapti qara bola
 						$expr: {
-							$and: [{ $eq: ['$likeRefId', '$$localLikeRefId'] }, { $eq: ['$memberId', '$$localMemberId'] }],
+							$and: [
+								{ $eq: ['$likeRefId', '$$localLikeRefId'] }, //
+								{ $eq: ['$memberId', '$$localMemberId'] },
+							], //
 						},
 					},
 				},

@@ -81,7 +81,7 @@ export class LikeService {
 			.exec();
 
 		// console.log('data =>', data);
-
+		// MEMBERNING KERAKSIZ MALUMOTINI TASHLAB YUBORAMIS:
 		const result: Properties = { list: [], metaCounter: data[0].metaCounter };
 		result.list = data[0].list.map((ele) => ele.favoriteProperty);
 		// console.log('result =>', result);
