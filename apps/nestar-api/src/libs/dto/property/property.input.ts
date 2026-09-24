@@ -85,12 +85,20 @@ export class PeriodsRange {
 
 @InputType()
 export class SquaresRange {
-	@Field(() => Date)
-	start: Date;
+	@Field(() => Int)
+	start: number;
 
-	@Field(() => Date)
-	end: Date;
+	@Field(() => Int)
+	end: number;
 }
+// @InputType()
+// export class SquaresRange {
+// 	@Field(() => Date)
+// 	start: Date;
+
+// 	@Field(() => Date)
+// 	end: Date;
+// }
 
 @InputType()
 class PISearch {
